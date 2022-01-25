@@ -11,12 +11,11 @@ public class ServidorDeObjetos01{
 
         int numPuertoRMIRegistry =0;
         String direccionIpRMIRegistry ="";
-        // System.out.println("Cual es la direccion ip donde se encuentra el rmiREgistry");
-        // direccionIpRMIRegistry = UtilidadesConsola.leerCadena();
-        // System.out.println("Cual es el numero de puerto por el cual escucha el rmiREgistry");
-        // numPuertoRMIRegistry = UtilidadesConsola.leerEntero();
-        direccionIpRMIRegistry="localhost";
-        numPuertoRMIRegistry=2022;
+        System.out.println("Cual es la direccion ip donde se encuentra el rmiREgistry");
+        direccionIpRMIRegistry = UtilidadesConsola.leerCadena();
+        System.out.println("Cual es el numero de puerto por el cual escucha el rmiREgistry");
+        numPuertoRMIRegistry = UtilidadesConsola.leerEntero();
+
 
         GestionUsuariosImpl objRemoto = new GestionUsuariosImpl();
        // objRemoto.consultarReferenciaRemota(direccionIpRMIRegistry,numPuertoRMIRegistry);

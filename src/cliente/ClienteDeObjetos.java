@@ -14,12 +14,11 @@ public class ClienteDeObjetos{
     public static void main (String[] args){
         int numPuertoRMIRegistry =0;
         String direccionIpRMIRegistry ="";
-        // System.out.println("Cual es la direccion ip donde se encuentra el rmiREgistry");
-        // direccionIpRMIRegistry = UtilidadesConsola.leerCadena();
-        // System.out.println("Cual es el numero de puerto por el cual escucha el rmiREgistry");
-        // numPuertoRMIRegistry = UtilidadesConsola.leerEntero();
-        direccionIpRMIRegistry="localhost";
-        numPuertoRMIRegistry=2022;
+        System.out.println("Cual es la direccion ip donde se encuentra el rmiREgistry");
+        direccionIpRMIRegistry = UtilidadesConsola.leerCadena();
+        System.out.println("Cual es el numero de puerto por el cual escucha el rmiREgistry");
+        numPuertoRMIRegistry = UtilidadesConsola.leerEntero();
+
 
         objRemoto = (GestionUsuariosInt) UtilidadesRegistroC.obtenerObjRemoto(direccionIpRMIRegistry,numPuertoRMIRegistry,"ObjetoRemotoPersonal");
         MenuPrincipal();
@@ -44,7 +43,7 @@ public class ClienteDeObjetos{
                         System.out.println("Ingrese la clave");
                         String varCrClave = UtilidadesConsola.leerCadena();
                         CredencialDTO objCredencial = new CredencialDTO(varCrUsuario,varCrClave);
-
+ 
                         int sesion = -1;
                         try{
                             System.out.println(objCredencial);
@@ -56,8 +55,15 @@ public class ClienteDeObjetos{
                             }
 
                         switch(sesion){
-                            case 0:
-                                
+                            case 0:  
+                                try{    
+                                    System.out.println("REGISTRANDO CALLBACK");
+                                    AdminCllbckImpl objAdmin = new AdminCllbckImpl();
+                                    objRemoto.registrarCallback(objAdmin);                  
+                                }
+                                catch(RemoteException e){
+                                    System.out.println("La operacion callback no se pudo completar, intente nuevamente...");
+                                }                               
                                 OpcionAdmin();
                                 break;
                             case 1:
@@ -67,7 +73,7 @@ public class ClienteDeObjetos{
                                 OpcionSecre();
                                 break;
                             case -1:
-                                System.out.println("ERRORSISIMO");
+                                System.out.println("Usuario no encontrado");
                                 break;
                             default:
                                 System.out.println("Opción incorrecta");
@@ -88,7 +94,7 @@ public class ClienteDeObjetos{
 
     private static void OpcionAdmin(){
         int opcionAdmin=0;
-
+        
         
         do
         {
@@ -120,14 +126,7 @@ public class ClienteDeObjetos{
 
     private static void OpcionPaf(){
         int opcionPaf=0;
-        try{    
-            System.out.println("REGISTRANDO CALLBACK");
-            AdminCllbckImpl objAdmin = new AdminCllbckImpl();
-            objRemoto.registrarCallback(objAdmin);                  
-        }
-        catch(RemoteException e){
-            System.out.println("La operacion callback no se pudo completar, intente nuevamente...");
-        }       
+             
         do
         {
             System.out.println("==Menu==");

@@ -14,9 +14,11 @@ public class GestionUsuariosImpl extends UnicastRemoteObject implements GestionU
     private ArrayList<PersonalDTO> personal;
     private ArrayList<AdminCllbckInt> listaActivos;
     private AdminCllbckInt objCllBck;
+
     
     public GestionUsuariosImpl() throws RemoteException{
         super();
+
         listaActivos=new ArrayList<>();
         this.personal = new ArrayList<>();
         String tipoId = "CC";
@@ -37,7 +39,7 @@ public class GestionUsuariosImpl extends UnicastRemoteObject implements GestionU
         if(personal.size() < 3)
         {            
             bandera=personal.add(objUsuario);
-            System.out.println("Usuario registrado: identificación: " + objUsuario.getId() + ", nombres: " + objUsuario.getNombreCompleto());
+            System.out.println("Usuario registrado: \n \t identificación: " + objUsuario.getId() + ",\n \t  nombres: " + objUsuario.getNombreCompleto());
         }
         
         return bandera;
@@ -63,38 +65,30 @@ public class GestionUsuariosImpl extends UnicastRemoteObject implements GestionU
 
     @Override
     public int abrirSesion(CredencialDTO objCredencial) throws RemoteException{
-        System.out.println(objCredencial);
         PersonalDTO tmpPersonalDTO = ocupacionBuscadaCredenciales(objCredencial);
+
         String ocupacion = tmpPersonalDTO.getOcupacion();
         switch(ocupacion){
             case "Admin":
                 return 0;
                 
             case "Paf":
+           
+                objCllBck.informarIngreso(tmpPersonalDTO.getNombreCompleto(),tmpPersonalDTO.getId());
                 return 1;
             case "Secretaria":
+                objCllBck.informarIngreso(tmpPersonalDTO.getNombreCompleto(),tmpPersonalDTO.getId());
                 return 2;
         }
         return -1;
     }
     @Override   
     public void registrarCallback(AdminCllbckInt objAdmin) throws RemoteException{
-        System.out.println("\t EN REGISTRAR CALLBACK");
-        System.out.println(objAdmin);
-        System.out.println("\t EN REGISTRAR CALLBACK");
-        if(!(listaActivos.contains(objAdmin))){
-            listaActivos.add(objAdmin);
-            System.out.println("Nuevo  Objeto adicionado");
-            hacerCallbck();
-        }
+
+        objCllBck=objAdmin;
+
     }
 
-    public void hacerCallbck() throws RemoteException{
-        for(int i=0;i<listaActivos.size();i++){
-            AdminCllbckInt obj=(AdminCllbckInt)listaActivos.get(i);
-            obj.informarIngreso("\t MENSAJE CALLBACK",111);
-        }
-   }
 
     public boolean usuarioExiste(CredencialDTO objCredencial){
         String tmpUsuario=objCredencial.getUsuario();
@@ -116,7 +110,6 @@ public class GestionUsuariosImpl extends UnicastRemoteObject implements GestionU
         String tmpUsuario=objCredencial.getUsuario();
         for (PersonalDTO personalDTO : personal) {
             if(personalDTO.getUsuario().equals(tmpUsuario)){
-                System.out.println(" entra i");
                 PersonalDTO retorno=new PersonalDTO(personalDTO.getTipo_id(), personalDTO.getId(), personalDTO.getNombreCompleto(), personalDTO.getOcupacion(), personalDTO.getUsuario(), personalDTO.getClave());
                 return retorno;
             }
